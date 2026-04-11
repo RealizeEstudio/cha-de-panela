@@ -143,3 +143,25 @@ function showToast(msg) {
         setTimeout(() => t.style.display = "none", 400);
     }, 3000);
 }
+
+    function iniciarContagem() {
+    const dataEvento = new Date("June 14, 2026 15:00:00").getTime();
+
+    setInterval(() => {
+        const agora = new Date().getTime();
+    const distancia = dataEvento - agora;
+
+    const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
+    const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
+    const segundos = Math.floor((distancia % (1000 * 60)) / 1000);
+
+    document.getElementById("dias").textContent = dias;
+    document.getElementById("horas").textContent = horas;
+    document.getElementById("minutos").textContent = minutos;
+    document.getElementById("segundos").textContent = segundos;
+
+    }, 1000);
+}
+
+    iniciarContagem();

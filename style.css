@@ -826,3 +826,92 @@ body {
     border-radius: 30px;
     cursor: pointer;
 }
+
+
+.countdown {
+    margin-top: 25px;
+    text-align: center;
+    padding: 0 12px;
+}
+
+.countdown-box {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.time-card {
+    flex: 1;
+    min-width: 0;
+    max-width: 70px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(184, 154, 111, 0.25);
+    border-radius: 12px;
+    padding: 10px 6px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.time-card span {
+    display: block;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #b89a6f;
+    font-family: 'Cormorant Garamond', serif;
+}
+
+.time-card small {
+    font-size: 0.7rem;
+    color: #777;
+}
+
+.countdown-title {
+    font-size: 1rem;
+    margin-bottom: 15px;
+    color: #8c7355;
+    letter-spacing: 1px;
+}
+
+.time-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(184, 154, 111, 0.25);
+    border-radius: 16px;
+    padding: 14px 18px;
+    min-width: 80px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.time-card span {
+    display: block;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #b89a6f;
+    font-family: 'Cormorant Garamond', serif;
+}
+
+.time-card small {
+    font-size: 0.85rem;
+    color: #777;
+}
+
+@media (max-width: 480px) {
+    .countdown-box {
+        gap: 6px;
+    }
+
+    .time-card {
+        padding: 8px 4px;
+        max-width: 60px;
+    }
+
+    .time-card span {
+        font-size: 1.1rem;
+    }
+
+    .time-card small {
+        font-size: 0.65rem;
+    }
+}

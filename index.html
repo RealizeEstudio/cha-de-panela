@@ -46,6 +46,33 @@
                 <p class="supertitle">Você foi convidado(a) para o</p>
                 <h1 class="title-main">Chá de Panela</h1>
                 <h2 class="title-names">Camila <span class="amp-gold">&amp;</span> Lucas</h2>
+
+                <div class="countdown fade-in delay-4">
+                    <p class="countdown-title">Faltam apenas</p>
+
+                    <div class="countdown-box">
+                        <div class="time-card">
+                            <span id="dias">00</span>
+                            <small>Dias</small>
+                        </div>
+
+                        <div class="time-card">
+                            <span id="horas">00</span>
+                            <small>Horas</small>
+                        </div>
+
+                        <div class="time-card">
+                            <span id="minutos">00</span>
+                            <small>Min</small>
+                        </div>
+
+                        <div class="time-card">
+                            <span id="segundos">00</span>
+                            <small>Seg</small>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <div class="divider-ornament fade-in delay-2">
@@ -102,6 +129,53 @@
         </section>
 
     </main>
+
+    <script>
+        function iniciarContagem() {
+            const dataEvento = new Date("2026-06-14T15:00:00").getTime();
+
+            function atualizarContagem() {
+                const agora = new Date().getTime();
+                const distancia = dataEvento - agora;
+
+                if (distancia <= 0) {
+                    document.getElementById("dias").textContent = "00";
+                    document.getElementById("horas").textContent = "00";
+                    document.getElementById("minutos").textContent = "00";
+                    document.getElementById("segundos").textContent = "00";
+                    return;
+                }
+
+                const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
+                const horas = Math.floor(
+                    (distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+                );
+                const minutos = Math.floor(
+                    (distancia % (1000 * 60 * 60)) / (1000 * 60)
+                );
+                const segundos = Math.floor(
+                    (distancia % (1000 * 60)) / 1000
+                );
+
+                document.getElementById("dias").textContent =
+                    String(dias).padStart(2, "0");
+
+                document.getElementById("horas").textContent =
+                    String(horas).padStart(2, "0");
+
+                document.getElementById("minutos").textContent =
+                    String(minutos).padStart(2, "0");
+
+                document.getElementById("segundos").textContent =
+                    String(segundos).padStart(2, "0");
+            }
+
+            atualizarContagem();
+            setInterval(atualizarContagem, 1000);
+        }
+
+        iniciarContagem();
+    </script>
 
 </body>
 
