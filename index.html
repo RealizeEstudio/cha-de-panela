@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chá de Panela · Camila & Lucas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <audio id="musica" loop>
+        <source src="music/musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        document.addEventListener("click", function tocarUmaVez() {
+            document.getElementById("musica").play().catch(() => { });
+            document.removeEventListener("click", tocarUmaVez);
+        });
+
+        function tocarEMudarPagina(e) {
+            e.preventDefault();
+            localStorage.setItem("musica", "tocando");
+            setTimeout(() => { window.location.href = "presentes.html"; }, 250);
+        }
+    </script>
+
+    <div class="bg-ornament top-left"></div>
+    <div class="bg-ornament bottom-right"></div>
+
+    <main class="hero-page">
+
+        <header class="site-header fade-in">
+            <div class="monogram">C <span class="amp">&amp;</span> L</div>
+        </header>
+
+        <section class="hero-content">
+
+            <div class="hero-text fade-in delay-1">
+                <p class="supertitle">Você foi convidado(a) para o</p>
+                <h1 class="title-main">Chá de Panela</h1>
+                <h2 class="title-names">Camila <span class="amp-gold">&amp;</span> Lucas</h2>
+            </div>
+
+            <div class="divider-ornament fade-in delay-2">
+                <span class="line"></span>
+                <svg class="flower-icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="20" cy="20" r="3" fill="#b89a6f" />
+                    <ellipse cx="20" cy="11" rx="3" ry="5.5" fill="#c9a97e" opacity="0.7" />
+                    <ellipse cx="20" cy="29" rx="3" ry="5.5" fill="#c9a97e" opacity="0.7" />
+                    <ellipse cx="11" cy="20" rx="5.5" ry="3" fill="#c9a97e" opacity="0.7" />
+                    <ellipse cx="29" cy="20" rx="5.5" ry="3" fill="#c9a97e" opacity="0.7" />
+                    <ellipse cx="13.8" cy="13.8" rx="3" ry="5.5" fill="#d4b48a" opacity="0.5"
+                        transform="rotate(45 13.8 13.8)" />
+                    <ellipse cx="26.2" cy="26.2" rx="3" ry="5.5" fill="#d4b48a" opacity="0.5"
+                        transform="rotate(45 26.2 26.2)" />
+                    <ellipse cx="26.2" cy="13.8" rx="3" ry="5.5" fill="#d4b48a" opacity="0.5"
+                        transform="rotate(-45 26.2 13.8)" />
+                    <ellipse cx="13.8" cy="26.2" rx="3" ry="5.5" fill="#d4b48a" opacity="0.5"
+                        transform="rotate(-45 13.8 26.2)" />
+                </svg>
+                <span class="line"></span>
+            </div>
+
+            <div class="hero-message fade-in delay-3">
+                <p class="welcome-text">
+                    Que alegria ter você aqui! Estamos prestes a começar um novo capítulo
+                    e gostaríamos muito de contar com o seu carinho nesse momento tão especial.
+                </p>
+                <p class="palette-note">
+                    Os presentes seguem a paleta
+                    <span class="swatches">
+                        <span class="swatch s1" title="Branco"></span>
+                        <span class="swatch s2" title="Areia"></span>
+                        <span class="swatch s3" title="Bege"></span>
+                        <span class="swatch s4" title="Palha"></span>
+                    </span>
+                    branco · areia · bege · palha
+                </p>
+            </div>
+
+            <div class="cta-area fade-in delay-4">
+                <a href="presentes.html" class="btn-primary" onclick="tocarEMudarPagina(event)">
+                    <span>Ver lista de presentes</span>
+                    <svg class="btn-arrow" viewBox="0 0 20 20" fill="none">
+                        <path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </a>
+                <div class="event-pills">
+                    <span class="pill">📅 14 de Junho, 2026</span>
+                    <span class="pill">⏰ 15h00</span>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

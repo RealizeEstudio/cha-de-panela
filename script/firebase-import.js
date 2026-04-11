@@ -1,0 +1,767 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+    getFirestore,
+    collection,
+    addDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import { firebaseConfig } from "./config.js";
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const presentes = [
+    {
+        "nome": "Jogo de panela antiaderente  Cerâmica creme",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_838676-MLA95680310072_102025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB35488290?pdp_filters=item_id:MLB3860165453&matt_tool=38524122#origin=share&sid=share&wid=MLB3860165453&action=copy",
+        "escolhidoPor": "",
+        "ordem": 1
+    },
+    {
+        "nome": "Panela de pressão  Bege vanilla",
+        "imagem": "https://m.magazineluiza.com.br/a-static/420x420/panela-de-pressao-brinox-42l-bege-vanilla/magazineluiza/237084500/fc162b412f28b9c4e90c72959abec363.jpg",
+        "linkCompra": "https://www.magazineluiza.com.br/panela-de-pressao-brinox-42l-bege-vanilla/p/237084500/ud/udpp/?partner_id=64853&utm_source=pdp_desk&utm_medium=share",
+        "escolhidoPor": "",
+        "ordem": 2
+    },
+    {
+        "nome": "Sanduicheira elétrica",
+        "imagem": "https://m.magazineluiza.com.br/a-static/420x420/sanduicheira-eletrica-cadence-click-750w-san400/magazineluiza/238024800/37ff05ff051d1900ce2fb8ca2780618d.jpg",
+        "linkCompra": "https://www.magazineluiza.com.br/sanduicheira-eletrica-cadence-click-750w-san400/p/238024800/ep/gset/?partner_id=64853&utm_source=pdp_desk&utm_medium=share",
+        "escolhidoPor": "",
+        "ordem": 3
+    },
+    {
+        "nome": "Liquidificador turbo Preto",
+        "imagem": "https://m.media-amazon.com/images/I/61AYmz-vU+L._AC_SY300_SX300_QL70_ML2_.jpg",
+        "linkCompra": "https://a.co/d/0jaqxSAC",
+        "escolhidoPor": "",
+        "ordem": 4
+    },
+    {
+        "nome": "Cafeteira elétrica Preta",
+        "imagem": "https://down-br.img.susercontent.com/file/sg-11134201-7rdxe-mbwvwy6qkoad18@resize_w450_nl.webp",
+        "linkCompra": "https://br.shp.ee/8njhQNu6",
+        "escolhidoPor": "",
+        "ordem": 5
+    },
+    {
+        "nome": "Batedeira Preta",
+        "imagem": "https://imgs.casasbahia.com.br/55005424/1g.jpg?imwidth=500",
+        "linkCompra": "https://www.casasbahia.com.br/batedeira-mondial-pratica-black-b-44-com-3-velocidades-preta/p/55005424?utm_medium=cpc&utm_source=GP_PLA&IdSku=55005424&idLojista=10037&tipoLojista=1P&gclsrc=aw.ds&utm_campaign=cb_b2c_gg_shopping_core_elpo_geral&gad_source=1&gad_campaignid=22439146548&gbraid=0AAAAADtAamgAnXxk1z9v3bByH2GvtzC1s",
+        "escolhidoPor": "",
+        "ordem": 6
+    },
+    {
+        "nome": "Multiprocessador  Preto",
+        "imagem": "https://m.media-amazon.com/images/I/61WvVblt--L._AC_SY300_SX300_QL70_ML2_.jpg",
+        "linkCompra": "https://a.co/d/03OvebAG",
+        "escolhidoPor": "",
+        "ordem": 7
+    },
+    {
+        "nome": "Jogo de talheres  Aço inox",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_673607-MLA105354255267_012026-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB35092029?pdp_filters=item_id:MLB3686609545&matt_tool=38524122#origin=share&sid=share&wid=MLB3686609545&action=copy",
+        "escolhidoPor": "",
+        "ordem": 8
+    },
+    {
+        "nome": "Jogo de facas Aço inox",
+        "imagem": "https://m.media-amazon.com/images/I/61PPolYwilL._AC_SY300_SX300_QL70_ML2_.jpg",
+        "linkCompra": "https://a.co/d/0idO8Vau",
+        "escolhidoPor": "",
+        "ordem": 9
+    },
+    {
+        "nome": "Jogo de assadeiras marinex Vidro branco",
+        "imagem": "https://m.media-amazon.com/images/I/611DHhOHFkL._AC_SY300_SX300_QL70_ML2_.jpg",
+        "linkCompra": "https://a.co/d/03ngngQM",
+        "escolhidoPor": "",
+        "ordem": 10
+    },
+    {
+        "nome": "Jogo de copos lisos Vidro",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_676122-MLA100084582413_122025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB25219123?pdp_filters=item_id:MLB5222115792&matt_tool=38524122#origin=share&sid=share&wid=MLB5222115792&action=copy",
+        "escolhidoPor": "",
+        "ordem": 11
+    },
+    {
+        "nome": "Conjunto De Utensílios De Cozinha De Silicone Preto",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_701215-MLB105613630321_012026-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB2058623914?pdp_filters=item_id:MLB6192751222&matt_tool=38524122#origin=share&sid=share&wid=MLB6192751222&action=copy",
+        "escolhidoPor": "",
+        "ordem": 12
+    },
+    {
+        "nome": "Kit medidor de receitas Preto",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_839732-MLB109157295289_032026-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/up/MLBU3682426591?pdp_filters=item_id:MLB4373423951&matt_tool=38524122#origin=share&sid=share&wid=MLB4373423951&action=copy",
+        "escolhidoPor": "",
+        "ordem": 13
+    },
+    {
+        "nome": "Kit Bowls Tigelas com Tampa Plástica  Inox",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_728698-MLA107901011296_032026-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB25125996?pdp_filters=item_id:MLB3588989695&matt_tool=38524122#origin=share&sid=share&wid=MLB3588989695&action=copy",
+        "escolhidoPor": "",
+        "ordem": 14
+    },
+    {
+        "nome": "Jogo De Taças Sobremesa vidro",
+        "imagem": "https://www.havan.com.br/media/catalog/product/cache/820af7facfa7aca6eb3c138e3457dc8d/j/o/jogo-de-tacas-sobremesa-230ml-havan-casa-6-pecas_1061901.webp",
+        "linkCompra": "https://www.havan.com.br/jogo-de-tacas-sobremesa-230ml-havan-casa-6-pecas-munique/p",
+        "escolhidoPor": "",
+        "ordem": 15
+    },
+    {
+        "nome": "Saladeira Com Tampa De Vidro  Inox",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_970489-MLB98929050808_112025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/up/MLBU3622126501?pdp_filters=item_id:MLB5967136188&matt_tool=38524122#origin=share&sid=share&wid=MLB5967136188&action=copy",
+        "escolhidoPor": "",
+        "ordem": 16
+    },
+    {
+        "nome": "Boleira com Tampa Acrílica e Prato de Vidro",
+        "imagem": "https://m.media-amazon.com/images/I/51yBtt8FlOL._AC_SY300_SX300_QL70_ML2_.jpg",
+        "linkCompra": "https://a.co/d/01xsDjHP",
+        "escolhidoPor": "",
+        "ordem": 17
+    },
+    {
+        "nome": "Centrífuga Seca Secador Salada",
+        "imagem": "https://m.magazineluiza.com.br/a-static/420x420/centrifuga-seca-secador-salada-vegetais-alfaces-verdura-45l-arthi/jmverejo/5022/bbe59abbea1f55ee74178b438d0e42e1.jpg",
+        "linkCompra": "https://m.magazineluiza.com.br/centrifuga-seca-secador-salada-vegetais-alfaces-verdura-45l-arthi/p/hjk7b1d3f6/ud/ctfg/?partner_id=64853&utm_source=pdp_desk&utm_medium=share",
+        "escolhidoPor": "Luciana freitas",
+        "ordem": 18
+    },
+    {
+        "nome": "Manteigueira Grande Com Tampa Em Cristal Vidro",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_797971-MLB108573940917_032026-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/up/MLBU3834330991?pdp_filters=item_id:MLB4524531413&matt_tool=38524122#origin=share&sid=share&wid=MLB4524531413&action=copy",
+        "escolhidoPor": "",
+        "ordem": 19
+    },
+    {
+        "nome": "Porta Tempero Saleiro Paliteiro 2 Peças inox",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_737708-MLB91737280360_092025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/up/MLBU3417177340?pdp_filters=item_id:MLB5686953724&matt_tool=38524122#origin=share&sid=share&wid=MLB5686953724&action=copy",
+        "escolhidoPor": "",
+        "ordem": 20
+    },
+    {
+        "nome": "Kit Colheres de Sorvete Alumínio",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_693738-MLA99600806432_122025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB27721846?pdp_filters=item_id:MLB5088351482&matt_tool=38524122#origin=share&sid=share&wid=MLB5088351482&action=copy",
+        "escolhidoPor": "",
+        "ordem": 21
+    },
+    {
+        "nome": "Escorredor de Massa + Lava Arroz  Inox",
+        "imagem": "https://down-br.img.susercontent.com/file/sg-11134201-82267-mhtgpvd5tz4127_tn",
+        "linkCompra": "https://br.shp.ee/WdsEz5iq",
+        "escolhidoPor": "",
+        "ordem": 22
+    },
+    {
+        "nome": "Descanso Suporte Apoio De Panela Redondo  Madeira",
+        "imagem": "https://down-br.img.susercontent.com/file/br-11134258-820lw-mlc5ivsid3bb6c",
+        "linkCompra": "https://br.shp.ee/TLF3UYpo",
+        "escolhidoPor": "",
+        "ordem": 23
+    },
+    {
+        "nome": "Kit 4 Panos de Copa Atoalhados Bege/branco/cinza",
+        "imagem": "https://down-br.img.susercontent.com/file/br-11134207-7r98o-mci48bj5pbepd1_tn",
+        "linkCompra": "https://br.shp.ee/8WjgV9M4",
+        "escolhidoPor": "",
+        "ordem": 24
+    },
+    {
+        "nome": "Luva Térmica Silicone 300°C Anti Calor Branca",
+        "imagem": "https://down-br.img.susercontent.com/file/br-11134207-81ztc-mkje42jcwjr62f_tn",
+        "linkCompra": "https://br.shp.ee/CPjotVsx",
+        "escolhidoPor": "",
+        "ordem": 25
+    },
+    {
+        "nome": "TÁBUA DE CORTE DE VIDRO TEMPERADO/BLINDEX  INCOLOR",
+        "imagem": "https://down-br.img.susercontent.com/file/sg-11134201-82618-mlnznwxq835v78_tn",
+        "linkCompra": "https://br.shp.ee/fG1B3BhY",
+        "escolhidoPor": "",
+        "ordem": 26
+    },
+    {
+        "nome": "4 Jogo Americano Bege",
+        "imagem": "https://m.media-amazon.com/images/I/61WPo0QGFTL._AC_SX679_.jpg",
+        "linkCompra": "https://a.co/d/063wPrSw",
+        "escolhidoPor": "",
+        "ordem": 27
+    },
+    {
+        "nome": "Kit Jogo americano em algodão + guardanapos em algodão para Mesa Posta",
+        "imagem": "https://down-br.img.susercontent.com/file/br-11134207-7r98o-md65u4q8khs17e_tn",
+        "linkCompra": "https://br.shp.ee/en5XbXhx",
+        "escolhidoPor": "",
+        "ordem": 28
+    },
+    {
+        "nome": "Toalha Mesa Impermeável 4 A 6 Lugares",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_866011-MLA95662457484_102025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB27098424?pdp_filters=item_id:MLB4538251318&matt_tool=38524122#origin=share&sid=share&wid=MLB4538251318&action=copy",
+        "escolhidoPor": "",
+        "ordem": 29
+    },
+    {
+        "nome": "Kit Potes de Vidro 640ml Hermético Retangular 4 Travas Marmita Microondas",
+        "imagem": "https://down-br.img.susercontent.com/file/br-11134207-820lh-mm0xtnhfz4efa3_tn",
+        "linkCompra": "https://br.shp.ee/3NwP3GVV",
+        "escolhidoPor": "",
+        "ordem": 30
+    },
+    {
+        "nome": "Kit 10 Porta Mantimentos Hermetico",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_680415-MLA95683712156_102025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB37212212?pdp_filters=item_id:MLB3858097737&matt_tool=38524122#origin=share&sid=share&wid=MLB3858097737&action=copy",
+        "escolhidoPor": "",
+        "ordem": 31
+    },
+    {
+        "nome": "Kit 2 Potes De Mantimentos Vidro 3,2 Litros - Arroz E Feijão",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_821826-MLB86664285471_062025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/up/MLBU3252305897?pdp_filters=item_id:MLB5454162922&matt_tool=38524122#origin=share&sid=share&wid=MLB5454162922&action=copy",
+        "escolhidoPor": "",
+        "ordem": 32
+    },
+    {
+        "nome": "Kit 3 Potes Herméticos De Vidro Com Tampa De Bambu E Escrita Sal Açúcar E Café",
+        "imagem": "https://m.media-amazon.com/images/I/51OKqLrQ-NL._AC_SY300_SX300_QL70_ML2_.jpg",
+        "linkCompra": "https://a.co/d/0j38MPR6",
+        "escolhidoPor": "",
+        "ordem": 33
+    },
+    {
+        "nome": "Lixeira 3 L Com Pedal  Aço Inox Polido",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_686069-MLA99901173373_112025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB20806548?pdp_filters=item_id:MLB4198073203&matt_tool=38524122#origin=share&sid=share&wid=MLB4198073203&action=copy",
+        "escolhidoPor": "",
+        "ordem": 34
+    },
+    {
+        "nome": "Ralador 6 Faces Kit 2  23cm  Inox",
+        "imagem": "https://down-br.img.susercontent.com/file/sg-11134201-7rdw2-mdjglfzxszthc4@resize_w450_nl.webp",
+        "linkCompra": "https://br.shp.ee/Kn7yDnst",
+        "escolhidoPor": "",
+        "ordem": 35
+    },
+    {
+        "nome": "Kit 2 Porta Azeite Vinagre Galheteiro Dispenser  Vidro",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_993376-MLB89203584104_082025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/up/MLBU3348359722?pdp_filters=item_id:MLB4150465279&matt_tool=38524122#origin=share&sid=share&wid=MLB4150465279&action=copy",
+        "escolhidoPor": "",
+        "ordem": 36
+    },
+    {
+        "nome": "Kit 4 Utensílios Cozinha Colher/Concha/Escumadeira Inox",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_620484-MLB83922857128_042025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/up/MLBU3114963929?pdp_filters=item_id:MLB5347502148&matt_tool=38524122#origin=share&sid=share&wid=MLB5347502148&action=copy",
+        "escolhidoPor": "",
+        "ordem": 37
+    },
+    {
+        "nome": "Cortador De Pizza  Inox",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_743111-MLA99624767638_122025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB26341011?pdp_filters=item_id:MLB4614347314&matt_tool=38524122#origin=share&sid=share&wid=MLB4614347314&action=copy",
+        "escolhidoPor": "Luciana",
+        "ordem": 38
+    },
+    {
+        "nome": "Espátula Para Bolo E Pizza Preta/cinza",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_666997-MLA95682254885_102025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB25542119?pdp_filters=item_id:MLB4552630733&matt_tool=38524122#origin=share&sid=share&wid=MLB4552630733&action=copy",
+        "escolhidoPor": "",
+        "ordem": 39
+    },
+    {
+        "nome": "Kit Utensílios Inox 3 ou 5 Peças – Amassador, Espremedor, Descascador",
+        "imagem": "https://down-br.img.susercontent.com/file/br-11134207-820m5-mmuh5zwwp7uqf4_tn",
+        "linkCompra": "https://br.shp.ee/cKt5DED3",
+        "escolhidoPor": "",
+        "ordem": 40
+    },
+    {
+        "nome": "Rolo De Abrir Massa Em Silicone Antiaderente  Cinza / Branco",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_708676-MLB107316822998_032026-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/up/MLBU3817144509?pdp_filters=item_id:MLB6398834462&matt_tool=38524122#origin=share&sid=share&wid=MLB6398834462&action=copy",
+        "escolhidoPor": "",
+        "ordem": 41
+    },
+    {
+        "nome": "Queijeira de cristal com tampa",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_985506-MLA96078189707_102025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB36442528?pdp_filters=item_id:MLB6460726148&matt_tool=38524122#origin=share&sid=share&wid=MLB6460726148&action=copy",
+        "escolhidoPor": "",
+        "ordem": 42
+    },
+    {
+        "nome": "Petisqueira Com Divisões",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_721722-MLA100071060517_122025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/up/MLBU3860363555?pdp_filters=item_id:MLB6518943246&matt_tool=38524122#origin=share&sid=share&wid=MLB6518943246&action=copy",
+        "escolhidoPor": "",
+        "ordem": 43
+    },
+    {
+        "nome": "Kit 2 Jarras de Vidro 1L com Tampa para Água Suco",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_656313-MLA98385624136_112025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB62320900?pdp_filters=item_id:MLB4455809059&matt_tool=38524122#origin=share&sid=share&wid=MLB4455809059&action=copy",
+        "escolhidoPor": "",
+        "ordem": 44
+    },
+    {
+        "nome": "Jarra De Vidro Para Suco Com Tampa 1,8 Litros",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_959976-MLA99635997692_122025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB26979232?pdp_filters=item_id:MLB4191014469&matt_tool=38524122#origin=share&sid=share&wid=MLB4191014469&action=copy",
+        "escolhidoPor": "",
+        "ordem": 45
+    },
+    {
+        "nome": "Pipoqueira Loreto Antiaderente Starflon 20cm 3,5L",
+        "imagem": "https://m.magazineluiza.com.br/a-static/420x420/pipoqueira-loreto-antiaderente-starflon-20cm-35l-tramontina/walaplace/tra20387020/f64928762e4cf34445fd7ce64b7cb4bb.jpg",
+        "linkCompra": "https://www.magazineluiza.com.br/pipoqueira-loreto-antiaderente-starflon-20cm-35l-tramontina/p/ed863b8b9h/ud/ppio/?partner_id=64853&utm_source=pdp_desk&utm_medium=share",
+        "escolhidoPor": "",
+        "ordem": 46
+    },
+    {
+        "nome": "Kit 4 Assadeiras Alumínio Reforçado Retangular",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_723824-MLB89051095641_072025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/up/MLBU3336389042?pdp_filters=item_id:MLB4142910787&matt_tool=38524122#origin=share&sid=share&wid=MLB4142910787&action=copy",
+        "escolhidoPor": "",
+        "ordem": 47
+    },
+    {
+        "nome": "Kit 3 Formas Para Bolo Torta Com Fundo Removível  Antiaderente Aço",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_728822-MLA99592074292_122025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB52421585?pdp_filters=item_id:MLB4127412633&matt_tool=38524122#origin=share&sid=share&wid=MLB4127412633&action=copy",
+        "escolhidoPor": "",
+        "ordem": 48
+    },
+    {
+        "nome": "Forma Antiaderente Pudim Cheesecake Bolos Com Furo No Meio",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_629745-MLA108093080082_032026-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB66735208?pdp_filters=item_id:MLB6470706692&matt_tool=38524122#origin=share&sid=share&wid=MLB6470706692&action=copy",
+        "escolhidoPor": "",
+        "ordem": 49
+    },
+    {
+        "nome": "Forma Redondo Antiaderente 19 Cm Para Bolo E Torta",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_660657-MLA104249523138_012026-F-forma-redondo-antiaderente-19-cm-para-bolo-e-torta.webp",
+        "linkCompra": "https://produto.mercadolivre.com.br/MLB-4420087799?attributes=COLOR_SECONDARY_COLOR:Q2luemEtZXNjdXJv&matt_tool=38524122#origin=share&sid=share&action=copy",
+        "escolhidoPor": "",
+        "ordem": 50
+    },
+    {
+        "nome": "Desentupidor Pia/Ralos Cozinha  Sanfonado",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_902789-MLB91748437713_092025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB2076435126?pdp_filters=item_id:MLB5400485610&matt_tool=38524122#origin=share&sid=share&wid=MLB5400485610&action=copy",
+        "escolhidoPor": "",
+        "ordem": 51
+    },
+    {
+        "nome": "Leiteira preta",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_995354-MLA95676698382_102025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB29550106?pdp_filters=item_id:MLB5491041916&matt_tool=38524122#origin=share&sid=share&wid=MLB5491041916&action=copy",
+        "escolhidoPor": "",
+        "ordem": 52
+    },
+    {
+        "nome": "Rodinho De Pia Cozinha Preto",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_999007-MLB98294688728_112025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/up/MLBU730405889?pdp_filters=item_id:MLB1585205601&matt_tool=38524122#origin=share&sid=share&wid=MLB1585205601&action=copy",
+        "escolhidoPor": "",
+        "ordem": 53
+    },
+    {
+        "nome": "Kit Pia Cozinha Lixeira 5l E Dispenser Liquido Preto",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_679076-MLB105236818497_012026-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/up/MLBU1481335114?pdp_filters=item_id:MLB5046584192&matt_tool=38524122#origin=share&sid=share&wid=MLB5046584192&action=copy",
+        "escolhidoPor": "",
+        "ordem": 54
+    },
+    {
+        "nome": "Tapetes 3 Peças Antiderrapante Bege/ Crú",
+        "imagem": "https://m.media-amazon.com/images/I/71lhn-Mbf3L._AC_SY300_SX300_QL70_ML2_.jpg",
+        "linkCompra": "https://a.co/d/0g7QKk3b",
+        "escolhidoPor": "",
+        "ordem": 55
+    },
+    {
+        "nome": "Porta Guardanapo Para Mesa Pequeno Acrilico Transparente",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_837409-MLA80687948470_112024-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB43825806?pdp_filters=item_id:MLB4405222199&matt_tool=38524122#origin=share&sid=share&wid=MLB4405222199&action=copy",
+        "escolhidoPor": "",
+        "ordem": 56
+    },
+    {
+        "nome": "Porta Tempero Condimento Giratório 12 Potes De  Vidro preto",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_762839-MLB107905778180_032026-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/up/MLBU3832617275?pdp_filters=item_id:MLB6439188600&matt_tool=38524122#origin=share&sid=share&wid=MLB6439188600&action=copy",
+        "escolhidoPor": "",
+        "ordem": 57
+    },
+    {
+        "nome": "Garrafa Térmica 1L Preta",
+        "imagem": "https://m.media-amazon.com/images/I/41UtI1kliEL._AC_SY300_SX300_QL70_ML2_.jpg",
+        "linkCompra": "https://a.co/d/0amTHOci",
+        "escolhidoPor": "",
+        "ordem": 58
+    },
+    {
+        "nome": "Escorredor De Louça Porta Inox Com 360°  preto",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_682641-MLB81567816967_122024-F-escorredor-de-louca-porta-inox-com-360-automatica-drenagem.webp",
+        "linkCompra": "https://produto.mercadolivre.com.br/MLB-3883707373?attributes=COLOR_SECONDARY_COLOR:UHJldG8=&matt_tool=38524122#origin=share&sid=share&action=copy",
+        "escolhidoPor": "Thamyres e Patrick",
+        "ordem": 59
+    },
+    {
+        "nome": "Jogo de Pratos porcelana",
+        "imagem": "https://m.media-amazon.com/images/I/41CRE+-U6bL._AC_SX300_SY300_QL70_ML2_.jpg",
+        "linkCompra": "https://a.co/d/06vf9F0K",
+        "escolhidoPor": "",
+        "ordem": 60
+    },
+    {
+        "nome": "Aparelho de jantar Branco/ marrom",
+        "imagem": "https://m.magazineluiza.com.br/a-static/420x420/aparelho-de-jantar-20-pecas-tramontina-redondo-porcelana-branco-e-marrom-mare/magazineluiza/238371200/5762bbafc105863a17f4f406ee989fad.jpg",
+        "linkCompra": "https://www.magazineluiza.com.br/aparelho-de-jantar-20-pecas-tramontina-redondo-porcelana-branco-e-marrom-mare/p/238371200/ud/apja/?partner_id=64853&utm_source=pdp_desk&utm_medium=share",
+        "escolhidoPor": "",
+        "ordem": 61
+    },
+    {
+        "nome": "Conjunto com 6 Xícaras de Chá com 6 pires Branco",
+        "imagem": "https://m.media-amazon.com/images/I/41m25irDHNL._AC_SY300_SX300_QL70_ML2_.jpg",
+        "linkCompra": "https://a.co/d/01nkmNpH",
+        "escolhidoPor": "",
+        "ordem": 62
+    },
+    {
+        "nome": "Frigideira Antiaderente Nanocerâmica 24cm Granito Creme",
+        "imagem": "https://m.media-amazon.com/images/I/41X76aYxp7L._AC_SL1000_.jpg",
+        "linkCompra": "https://a.co/d/066lJuNu",
+        "escolhidoPor": "",
+        "ordem": 63
+    },
+    {
+        "nome": "Espremedor de Frutas Aluminio BIVOLT",
+        "imagem": "https://m.media-amazon.com/images/I/610Li5+6huL._AC_SY300_SX300_QL70_ML2_.jpg",
+        "linkCompra": "https://a.co/d/005cCxTl",
+        "escolhidoPor": "",
+        "ordem": 64
+    },
+    {
+        "nome": "Jogo com 6 Taças de Vinho Crystal",
+        "imagem": "https://m.media-amazon.com/images/I/51htW5qI69L._AC_SY300_SX300_QL70_ML2_.jpg",
+        "linkCompra": "https://a.co/d/04qGRR3a",
+        "escolhidoPor": "",
+        "ordem": 65
+    },
+    {
+        "nome": "Fruteira Mesa 3 Andares  Metal preta",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_950741-MLA104024044972_012026-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/up/MLBU3719217283?pdp_filters=item_id:MLB6161327170&matt_tool=38524122#origin=share&sid=share&wid=MLB6161327170&action=copy",
+        "escolhidoPor": "",
+        "ordem": 66
+    },
+    {
+        "nome": "Kit Pegador De Massas E De Salada  Inox",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_610077-MLB76860796281_062024-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/up/MLBU608587113?pdp_filters=item_id:MLB4758630926&matt_tool=38524122#origin=share&sid=share&wid=MLB4758630926&action=copy",
+        "escolhidoPor": "",
+        "ordem": 67
+    },
+    {
+        "nome": "Kit 2 Moedores De Sal Grosso E Pimenta Do Reino  Aço Inox",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_817854-MLA99623500972_122025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB58138654?pdp_filters=item_id:MLB4226003739&matt_tool=38524122#origin=share&sid=share&wid=MLB4226003739&action=copy",
+        "escolhidoPor": "",
+        "ordem": 68
+    },
+    {
+        "nome": "2 Potes Vidro Hermético Grande 1480ml",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_976802-MLB104158871753_012026-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/up/MLBU3711662991?pdp_filters=item_id:MLB4409236659&matt_tool=38524122#origin=share&sid=share&wid=MLB4409236659&action=copy",
+        "escolhidoPor": "",
+        "ordem": 69
+    },
+    {
+        "nome": "Conjunto Galheteiro 4 Peças Inox",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_783847-MLA95708711268_102025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB36793365?pdp_filters=item_id:MLB3844894007&matt_tool=38524122#origin=share&sid=share&wid=MLB3844894007&action=copy",
+        "escolhidoPor": "",
+        "ordem": 70
+    },
+    {
+        "nome": "Cuscuzeira Alumínio",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_857470-MLA102999786507_122025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB63652816?pdp_filters=item_id:MLB4386772435&matt_tool=38524122#origin=share&sid=share&wid=MLB4386772435&action=copy",
+        "escolhidoPor": "",
+        "ordem": 71
+    },
+    {
+        "nome": "Bowl Kit 3em1 Multiuso aço inox",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_642330-MLB108264753235_032026-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/up/MLBU3834432930?pdp_filters=item_id:MLB6421116460&matt_tool=38524122#origin=share&sid=share&wid=MLB6421116460&action=copy",
+        "escolhidoPor": "",
+        "ordem": 72
+    },
+    {
+        "nome": "Conjunto De Bowls para sopa Porcelana Branca",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_832921-MLB93030075043_092025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/up/MLBU3161941896?pdp_filters=item_id:MLB5375489258&matt_tool=38524122#origin=share&sid=share&wid=MLB5375489258&action=copy",
+        "escolhidoPor": "",
+        "ordem": 73
+    },
+    {
+        "nome": "Jogo 6 Taças Sobremesa  Vidro",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_880449-MLB107442937287_022026-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/up/MLBU3379996052?pdp_filters=item_id:MLB5619929186&matt_tool=38524122#origin=share&sid=share&wid=MLB5619929186&action=copy",
+        "escolhidoPor": "",
+        "ordem": 74
+    },
+    {
+        "nome": "Bandeja Café Da Manha Na Cama Pés Dobraveis  Bambu",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_968380-MLA99634995781_112025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB62564213?pdp_filters=item_id:MLB4331422441&matt_tool=38524122#origin=share&sid=share&wid=MLB4331422441&action=copy",
+        "escolhidoPor": "",
+        "ordem": 75
+    },
+    {
+        "nome": "Assadeira Pirex Vidro Com Tampa",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_617084-MLB96070121669_102025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/up/MLBU3624461309?pdp_filters=item_id:MLB4327088301&matt_tool=38524122#origin=share&sid=share&wid=MLB4327088301&action=copy",
+        "escolhidoPor": "",
+        "ordem": 76
+    },
+    {
+        "nome": "Tábua de passar",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_890744-MLB94280974127_102025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/up/MLBU3472975076?pdp_filters=item_id:MLB4238291161&matt_tool=38524122#origin=share&sid=share&wid=MLB4238291161&action=copy",
+        "escolhidoPor": "",
+        "ordem": 77
+    },
+    {
+        "nome": "Ferro De Passar A Seco",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_768501-MLB93526025314_102025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/up/MLBU3461725166?pdp_filters=item_id:MLB5761630764&matt_tool=38524122#origin=share&sid=share&wid=MLB5761630764&action=copy",
+        "escolhidoPor": "",
+        "ordem": 78
+    },
+    {
+        "nome": "Suporte De Vassoura  Aço Inox",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_795655-MLB103136067607_122025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/up/MLBU3631429009?pdp_filters=item_id:MLB4332313617&matt_tool=38524122#origin=share&sid=share&wid=MLB4332313617&action=copy",
+        "escolhidoPor": "",
+        "ordem": 79
+    },
+    {
+        "nome": "Vassoura E Pá Limpa Cerdas Suporte Parede",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_915624-MLB93356676738_092025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB2070025859?pdp_filters=item_id:MLB4136021931&matt_tool=38524122#origin=share&sid=share&wid=MLB4136021931&action=copy",
+        "escolhidoPor": "",
+        "ordem": 80
+    },
+    {
+        "nome": "Rodo Vassoura Multiuso",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_921203-MLA99445328012_112025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB41320249?pdp_filters=item_id:MLB5528635670&matt_tool=38524122#origin=share&sid=share&wid=MLB5528635670&action=copy",
+        "escolhidoPor": "",
+        "ordem": 81
+    },
+    {
+        "nome": "Mop Esfregão Giratório",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_810904-MLA93779476451_092025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB47285674?pdp_filters=item_id:MLB5919534142&matt_tool=38524122#origin=share&sid=share&wid=MLB5919534142&action=copy",
+        "escolhidoPor": "",
+        "ordem": 82
+    },
+    {
+        "nome": "2 baldes 10L",
+        "imagem": "https://down-br.img.susercontent.com/file/br-11134207-7r98o-lvj0dfrdhd1t89@resize_w450_nl.webp",
+        "linkCompra": "https://br.shp.ee/Jzp5kugV",
+        "escolhidoPor": "",
+        "ordem": 83
+    },
+    {
+        "nome": "Kit panos de chão",
+        "imagem": "https://down-br.img.susercontent.com/file/sg-11134201-7rdxj-lzs4fe7935bef4_tn",
+        "linkCompra": "https://br.shp.ee/4pdyRQHv",
+        "escolhidoPor": "",
+        "ordem": 84
+    },
+    {
+        "nome": "Varal De Chão",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_790799-MLB80916600080_122024-F-varal-de-cho-com-abas-dobravel-reforcado-retratil-grande.webp",
+        "linkCompra": "https://produto.mercadolivre.com.br/MLB-2728769488?matt_tool=38524122#origin=share&sid=share&action=copy",
+        "escolhidoPor": "",
+        "ordem": 85
+    },
+    {
+        "nome": "Varal de teto",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_960944-MLB105671303412_012026-F-varal-pratico-de-teto-aco-120cm-6-varetas-reforcado-cores.webp",
+        "linkCompra": "https://produto.mercadolivre.com.br/MLB-6210199004?matt_tool=38524122#origin=share&sid=share&action=copy",
+        "escolhidoPor": "",
+        "ordem": 86
+    },
+    {
+        "nome": "Kit Dispenser Organizador Porta Amaciante/Sabão em Pó/Sabonete Liquido  Acrilico",
+        "imagem": "https://down-br.img.susercontent.com/file/sg-11134201-821fz-mglm1rzxjjt8e6@resize_w450_nl.webp",
+        "linkCompra": "https://br.shp.ee/AcoW5Ncv",
+        "escolhidoPor": "",
+        "ordem": 87
+    },
+    {
+        "nome": "Jogo de Toalhas 100% Algodão  4 peças preto",
+        "imagem": "https://imgmarketplace.lojasrenner.com.br/20000/6167/7010705708615/7510712313734/0.jpeg",
+        "linkCompra": "https://www.camicado.com.br/p/kit-de-toalhas-4-pecas-100-algodao-cor-verde/-/A-7010705708615-br.lc",
+        "escolhidoPor": "",
+        "ordem": 88
+    },
+    {
+        "nome": "Jogo de Toalha Felpuda 100% Algodão  4 Peças Branco",
+        "imagem": "https://imgmarketplace.lojasrenner.com.br/20000/2907/7010706541806/7510714125578/1.jpeg",
+        "linkCompra": "https://www.camicado.com.br/p/jogo-de-toalha-kazzavip-felpuda-100-algodao-banho-e-rosto-eleganz-4-pecas-branco/-/A-7010706541806-br.lc",
+        "escolhidoPor": "",
+        "ordem": 89
+    },
+    {
+        "nome": "Roupão casal M/G",
+        "imagem": "https://m.media-amazon.com/images/I/519pTxeCm1L._AC_SY500_.jpg",
+        "linkCompra": "https://a.co/d/04TIMmS7",
+        "escolhidoPor": "",
+        "ordem": 90
+    },
+    {
+        "nome": "Tapete Antiderrapante Banheiro- 3 peças  Cinza",
+        "imagem": "https://m.media-amazon.com/images/I/71aDmxG1o9L._AC_SY300_SX300_QL70_ML2_.jpg",
+        "linkCompra": "https://a.co/d/0c6OlzG1",
+        "escolhidoPor": "",
+        "ordem": 91
+    },
+    {
+        "nome": "Conjunto lixeira e escova sanitária 3L Preta",
+        "imagem": "https://m.media-amazon.com/images/I/51geF-GyX+L._AC_SY300_SX300_QL70_ML2_.jpg",
+        "linkCompra": "https://a.co/d/0cXIyWS4",
+        "escolhidoPor": "",
+        "ordem": 92
+    },
+    {
+        "nome": "Porta Papel Higienico  Vidro",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_994203-MLB99514898921_112025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/up/MLBU3516601512?pdp_filters=item_id:MLB5844547818&matt_tool=38524122#origin=share&sid=share&wid=MLB5844547818&action=copy",
+        "escolhidoPor": "",
+        "ordem": 93
+    },
+    {
+        "nome": "Kit Conjunto Banheiro Lavabo Branco 3 Pçs Cerâmica",
+        "imagem": "https://m.media-amazon.com/images/I/514rKlI7uzL._AC_SX679_.jpg",
+        "linkCompra": "https://a.co/d/04evg0P7",
+        "escolhidoPor": "",
+        "ordem": 94
+    },
+    {
+        "nome": "Kit Colcha Cobre Leito Casal Cinza",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_902053-MLB108484809022_032026-F-kit-colcha-cobre-leito-casal-com-porta-travesseiro-moderno.webp",
+        "linkCompra": "https://produto.mercadolivre.com.br/MLB-4098113649?matt_tool=38524122#origin=share&sid=share&action=copy",
+        "escolhidoPor": "",
+        "ordem": 95
+    },
+    {
+        "nome": "Cobre Leito  Casal Marrom",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_833456-MLA107589750129_022026-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB65357600?pdp_filters=item_id:MLB6243058118&matt_tool=38524122#origin=share&sid=share&wid=MLB6243058118&action=copy",
+        "escolhidoPor": "",
+        "ordem": 96
+    },
+    {
+        "nome": "Jogo de Lençol para Cama Box CASAL Bege/cinza",
+        "imagem": "https://m.media-amazon.com/images/I/61VNe0Ma1BL._AC_SY300_SX300_QL70_ML2_.jpg",
+        "linkCompra": "https://a.co/d/0cANQDNz",
+        "escolhidoPor": "",
+        "ordem": 97
+    },
+    {
+        "nome": "Lençol Avulso C/ Elastico Casal Branco",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_677819-MLA94808383488_102025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB60128432?pdp_filters=item_id:MLB5827102330&matt_tool=38524122#origin=share&sid=share&wid=MLB5827102330&action=copy",
+        "escolhidoPor": "",
+        "ordem": 98
+    },
+    {
+        "nome": "Kit Edredom + lençol Casal Padrão Box Branco",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_612980-MLA95095400424_102025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB36803107?pdp_filters=item_id:MLB3883949187&matt_tool=38524122#origin=share&sid=share&wid=MLB3883949187&action=copy",
+        "escolhidoPor": "",
+        "ordem": 99
+    },
+    {
+        "nome": "Edredom Cobertor Casal Bege/branco",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_972593-MLA93088026642_092025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB23152962?pdp_filters=item_id:MLB5394726204&matt_tool=38524122#origin=share&sid=share&wid=MLB5394726204&action=copy",
+        "escolhidoPor": "",
+        "ordem": 100
+    },
+    {
+        "nome": "Kit 2 Travesseiros",
+        "imagem": "https://m.media-amazon.com/images/I/51Dupw5h5LL._AC_SY300_SX300_QL70_ML2_.jpg",
+        "linkCompra": "https://a.co/d/09ENNoK7",
+        "escolhidoPor": "",
+        "ordem": 101
+    },
+    {
+        "nome": "2 Fronhas Cetim De Seda Antifrizz Branca",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_706642-MLA96409160039_102025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB26687165?pdp_filters=item_id:MLB4234000987&matt_tool=38524122#origin=share&sid=share&wid=MLB4234000987&action=copy",
+        "escolhidoPor": "",
+        "ordem": 102
+    },
+    {
+        "nome": "2 Coberta Manta Cobertor Casal cinza/preto",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_804152-MLA95404511406_102025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB52584608?pdp_filters=item_id:MLB4164543609&matt_tool=38524122#origin=share&sid=share&wid=MLB4164543609&action=copy",
+        "escolhidoPor": "",
+        "ordem": 103
+    },
+    {
+        "nome": "Kit 4 Almofadas Decorativas marrom/bege",
+        "imagem": "https://m.media-amazon.com/images/I/517PVshddBL._AC_SY300_SX300_QL70_ML2_.jpg",
+        "linkCompra": "https://a.co/d/0cnN7xRC",
+        "escolhidoPor": "",
+        "ordem": 104
+    },
+    {
+        "nome": "Manta Sofa Retratil Grande Algodão cru/ off white",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_826654-MLA100080878235_122025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB27951039?pdp_filters=item_id:MLB6205693606&matt_tool=38524122#origin=share&sid=share&wid=MLB6205693606&action=copy",
+        "escolhidoPor": "",
+        "ordem": 105
+    },
+    {
+        "nome": "Tapete Sala Antiderrapante 1,40x2,00m Bege",
+        "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_891466-MLA96665661050_112025-F.webp",
+        "linkCompra": "https://www.mercadolivre.com.br/p/MLB60331577?pdp_filters=item_id:MLB6089937806&matt_tool=38524122#origin=share&sid=share&wid=MLB6089937806&action=copy",
+        "escolhidoPor": "teste",
+        "ordem": 106
+    }
+];
+
+async function importar() {
+    for (const presente of presentes) {
+        await addDoc(collection(db, "presentes"), presente);
+        console.log("Adicionado:", presente.nome);
+    }
+
+    console.log("Todos importados com sucesso!");
+}
+
+importar();

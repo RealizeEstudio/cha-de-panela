@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obrigado! · Camila & Lucas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <audio id="musica" loop>
+        <source src="music/musica.mp3" type="audio/mpeg">
+    </audio>
+    <script>
+        window.addEventListener("load", () => {
+            if (localStorage.getItem("musica") === "tocando") {
+                document.getElementById("musica").play().catch(() => { });
+            }
+        });
+    </script>
+
+    <div class="bg-ornament top-left"></div>
+    <div class="bg-ornament bottom-right"></div>
+
+    <canvas id="confetti-canvas"
+        style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0"></canvas>
+
+    <main class="obrigado-page">
+
+        <div class="obrigado-card fade-in">
+
+            <div class="monogram">C <span class="amp">&amp;</span> L</div>
+
+            <div class="check-circle">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="24" cy="24" r="23" stroke="#b89a6f" stroke-width="1.5" />
+                    <path d="M14 24l7 7 13-14" stroke="#b89a6f" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </div>
+
+            <h1 class="title-main smaller" style="margin:0">Obrigado pelo<br>carinho! 🤍</h1>
+
+            <p class="welcome-text" style="margin-top:1rem">
+                Ficamos muito felizes com a sua escolha.<br>
+                Mal podemos esperar para celebrar com você!
+            </p>
+
+            <div class="divider-ornament" style="margin:1.5rem 0">
+                <span class="line"></span>
+                <svg class="flower-icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="20" cy="20" r="3" fill="#b89a6f" />
+                    <ellipse cx="20" cy="11" rx="3" ry="5.5" fill="#c9a97e" opacity="0.7" />
+                    <ellipse cx="20" cy="29" rx="3" ry="5.5" fill="#c9a97e" opacity="0.7" />
+                    <ellipse cx="11" cy="20" rx="5.5" ry="3" fill="#c9a97e" opacity="0.7" />
+                    <ellipse cx="29" cy="20" rx="5.5" ry="3" fill="#c9a97e" opacity="0.7" />
+                </svg>
+                <span class="line"></span>
+            </div>
+
+            <div class="event-details">
+                <div class="detail-row">
+                    <span class="detail-icon">📅</span>
+                    <div>
+                        <span class="detail-label">Data</span>
+                        <span class="detail-value">14 de Junho de 2026</span>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-icon">⏰</span>
+                    <div>
+                        <span class="detail-label">Horário</span>
+                        <span class="detail-value">15h00</span>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-icon">📍</span>
+                    <div>
+                        <span class="detail-label">Local</span>
+                        <span class="detail-value">Av. Abílio Augusto Távora, 3775<br>Residencial Vale do Sol</span>
+                    </div>
+                </div>
+            </div>
+
+            <a href="index.html" class="btn-secondary" style="margin-top:2rem">
+                Voltar ao início
+            </a>
+
+        </div>
+
+    </main>
+
+    <script>
+        const canvas = document.getElementById("confetti-canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        window.addEventListener("resize", () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+        const particles = Array.from({ length: 60 }, () => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height - canvas.height,
+            size: Math.random() * 8 + 4,
+            speed: Math.random() * 1.5 + 0.5,
+            opacity: Math.random() * 0.5 + 0.3,
+            char: ["🤍", "✨", "💛", "🌿"][Math.floor(Math.random() * 4)]
+        }));
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                ctx.globalAlpha = p.opacity;
+                ctx.font = p.size + "px serif";
+                ctx.fillText(p.char, p.x, p.y);
+                p.y += p.speed;
+                if (p.y > canvas.height + 20) {
+                    p.y = -20;
+                    p.x = Math.random() * canvas.width;
+                }
+            });
+            ctx.globalAlpha = 1;
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+
+</html>
