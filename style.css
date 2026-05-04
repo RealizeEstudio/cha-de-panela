@@ -232,6 +232,34 @@ body {
     border-color: var(--gold);
 }
 
+.btn-escolher {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 20px;
+    background: var(--sand);
+    color: var(--gold-dark);
+    border: 1px solid var(--linen);
+    border-radius: 50px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    white-space: nowrap;
+}
+
+.btn-escolher:hover {
+    background: var(--beige);
+    border-color: var(--gold);
+    transform: translateY(-1px);
+}
+
+.btn-escolher:active {
+    transform: translateY(0);
+}
+
 .pill {
     display: inline-flex;
     align-items: center;
@@ -323,7 +351,7 @@ body {
     z-index: 1;
     max-width: 780px;
     margin: 0 auto;
-    padding: 2rem 1.5rem 8rem;
+    padding: 2rem 1.5rem 5rem;
 }
 
 .list-header {
@@ -375,24 +403,6 @@ body {
 
 .palette-label {
     margin-left: 4px;
-}
-
-.aviso-box {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    background: var(--sand);
-    border-left: 2.5px solid var(--gold);
-    border-radius: 0 10px 10px 0;
-    padding: 12px 16px;
-    font-size: 0.85rem;
-    color: var(--text-mid);
-    margin-bottom: 2rem;
-    line-height: 1.6;
-}
-
-.aviso-box strong {
-    color: var(--gold-dark);
 }
 
 .loading-state {
@@ -488,7 +498,6 @@ body {
     border-radius: 10px;
     overflow: hidden;
     background: var(--sand);
-    aspect-ratio: 1/1;
     height: 120px;
 }
 
@@ -497,7 +506,6 @@ body {
     height: 100%;
     object-fit: cover;
     display: block;
-    border-radius: 10px;
     transition: transform 0.4s ease;
 }
 
@@ -566,68 +574,168 @@ body {
     font-size: 0.9rem;
 }
 
-.input-wrap input {
+.confirm-area {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 0.5px solid var(--beige);
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(58, 46, 34, 0.45);
+    z-index: 50;
+    opacity: 0;
+    transition: opacity 0.28s ease;
+    backdrop-filter: blur(3px);
+}
+
+.modal-overlay.open {
+    opacity: 1;
+}
+
+.confirm-modal {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 51;
+    background: var(--white);
+    border-radius: 24px 24px 0 0;
+    padding: 2rem 1.8rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-shadow: 0 -8px 40px rgba(90, 60, 20, 0.15);
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+    max-width: 560px;
+    margin: 0 auto;
+}
+
+.confirm-modal.open {
+    transform: translateY(0);
+}
+
+@media (min-width: 600px) {
+    .confirm-modal {
+        bottom: auto;
+        top: 50%;
+        left: 50%;
+        right: auto;
+        transform: translate(-50%, -40%);
+        border-radius: 20px;
+        width: 90%;
+        max-width: 460px;
+        opacity: 0;
+        transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .confirm-modal.open {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--sand);
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-mid);
+    transition: background 0.2s;
+}
+
+.modal-close:hover {
+    background: var(--beige);
+}
+
+.modal-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-light);
+}
+
+.modal-gift-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.3;
+}
+
+.modal-ask {
+    font-size: 0.88rem;
+    color: var(--text-mid);
+    margin-top: -0.2rem;
+}
+
+.confirm-modal input {
     width: 100%;
-    padding: 9px 14px;
+    padding: 12px 18px;
     border: 1px solid var(--beige);
     border-radius: 50px;
     font-family: 'Jost', sans-serif;
-    font-size: 0.88rem;
+    font-size: 1rem;
     color: var(--text);
     background: var(--cream);
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
-    appearance: none;
-    -webkit-appearance: none;
 }
 
-.input-wrap input::placeholder {
+.confirm-modal input::placeholder {
     color: var(--text-light);
 }
 
-.input-wrap input:focus {
+.confirm-modal input:focus {
     border-color: var(--gold);
     box-shadow: 0 0 0 3px rgba(184, 154, 111, 0.15);
     background: var(--white);
 }
 
-.confirm-area {
-    position: fixed;
-    bottom: 0;
-    left: 0;
+.confirm-modal input.shake {
+    animation: shake 0.4s ease;
+    border-color: #e24b4a;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20% {
+        transform: translateX(-6px);
+    }
+
+    40% {
+        transform: translateX(6px);
+    }
+
+    60% {
+        transform: translateX(-4px);
+    }
+
+    80% {
+        transform: translateX(4px);
+    }
+}
+
+.modal-confirm-btn {
     width: 100%;
-    background: rgba(250, 247, 242, 0.95);
-    backdrop-filter: blur(10px);
-    padding: 1rem;
-    display: flex;
     justify-content: center;
-    border-top: 1px solid var(--beige);
-    z-index: 999;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
-}
-
-.toast {
-    position: fixed;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%) translateY(10px);
-    background: var(--text);
-    color: white;
-    padding: 12px 24px;
-    border-radius: 50px;
-    font-size: 0.85rem;
-    letter-spacing: 0.04em;
-    opacity: 0;
-    transition: opacity 0.3s, transform 0.3s;
-    z-index: 100;
-    white-space: nowrap;
-    max-width: 90vw;
-    text-align: center;
-}
-
-.toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
 }
 
 .obrigado-page {
@@ -713,6 +821,30 @@ body {
     line-height: 1.4;
 }
 
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: var(--text);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 100;
+    white-space: nowrap;
+    max-width: 90vw;
+    text-align: center;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
 .fade-in {
     opacity: 0;
     transform: translateY(18px);
@@ -765,6 +897,11 @@ body {
         font-size: 1rem;
     }
 
+    .btn-escolher {
+        font-size: 0.78rem;
+        padding: 8px 14px;
+    }
+
     .obrigado-card {
         padding: 2rem 1.4rem;
     }
@@ -773,128 +910,62 @@ body {
         font-size: 1.2rem;
     }
 
-    .title-main {
-        line-height: 1.1;
-    }
-
     .event-pills {
         flex-direction: column;
         align-items: center;
     }
 }
 
-.historico-panel {
-    position: fixed;
-    left: 0;
-    bottom: -100%;
-    width: 100%;
-    height: 70vh;
-    background: white;
-    border-radius: 20px 20px 0 0;
-    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.15);
-    transition: bottom 0.4s ease;
-    z-index: 9999;
-    padding: 20px;
-    overflow-y: auto;
-}
-
-.historico-panel.show {
-    bottom: 0;
-}
-
-.historico-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.historico-lista {
-    margin-top: 20px;
-}
-
-.historico-item {
-    padding: 12px;
-    border-bottom: 1px solid #eee;
-}
-
-.btn-historico {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    padding: 12px 18px;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-}
-
-
 .countdown {
-    margin-top: 25px;
+    margin-top: 2rem;
     text-align: center;
-    padding: 0 12px;
+}
+
+.countdown-title {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 1rem;
 }
 
 .countdown-box {
     display: flex;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
     flex-wrap: nowrap;
-    width: 100%;
 }
 
 .time-card {
-    flex: 1;
-    min-width: 0;
-    max-width: 70px;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(184, 154, 111, 0.25);
-    border-radius: 12px;
-    padding: 10px 6px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-}
-
-.time-card span {
-    display: block;
-    font-size: 1.4rem;
-    font-weight: 600;
-    color: #b89a6f;
-    font-family: 'Cormorant Garamond', serif;
-}
-
-.time-card small {
-    font-size: 0.7rem;
-    color: #777;
-}
-
-.countdown-title {
-    font-size: 1rem;
-    margin-bottom: 15px;
-    color: #8c7355;
-    letter-spacing: 1px;
-}
-
-.time-card {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(184, 154, 111, 0.25);
-    border-radius: 16px;
+    background: var(--white);
+    border: 0.5px solid var(--beige);
+    border-radius: 14px;
     padding: 14px 18px;
-    min-width: 80px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    min-width: 70px;
+    box-shadow: 0 4px 16px rgba(90, 60, 20, 0.06);
+    text-align: center;
 }
 
 .time-card span {
     display: block;
-    font-size: 2rem;
-    font-weight: 600;
-    color: #b89a6f;
     font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
 }
 
 .time-card small {
-    font-size: 0.85rem;
-    color: #777;
+    display: block;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-top: 4px;
 }
 
 @media (max-width: 480px) {
@@ -903,15 +974,15 @@ body {
     }
 
     .time-card {
-        padding: 8px 4px;
-        max-width: 60px;
+        padding: 10px 10px;
+        min-width: 58px;
     }
 
     .time-card span {
-        font-size: 1.1rem;
+        font-size: 1.5rem;
     }
 
     .time-card small {
-        font-size: 0.65rem;
+        font-size: 0.62rem;
     }
 }

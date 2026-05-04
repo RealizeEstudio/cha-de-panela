@@ -18,13 +18,12 @@
         <source src="music/musica.mp3" type="audio/mpeg">
     </audio>
     <script>
-        window.addEventListener("load", () => {
-            if (localStorage.getItem("musica") === "tocando") {
-                document.getElementById("musica").play().catch(() => { });
-            }
+        window.addEventListener("load", function () {
+            if (localStorage.getItem("musica") === "tocando")
+                document.getElementById("musica").play().catch(function () { });
         });
         document.addEventListener("click", function once() {
-            document.getElementById("musica").play().catch(() => { });
+            document.getElementById("musica").play().catch(function () { });
             document.removeEventListener("click", once);
         });
     </script>
@@ -33,7 +32,6 @@
     <div class="bg-ornament bottom-right"></div>
 
     <main class="list-page">
-
         <header class="list-header fade-in">
             <a href="index.html" class="back-link">
                 <svg viewBox="0 0 20 20" fill="none" width="16">
@@ -57,41 +55,38 @@
             </div>
         </section>
 
-        <div class="aviso-box fade-in delay-2">
-            <svg viewBox="0 0 20 20" fill="none" width="16" style="flex-shrink:0;margin-top:2px">
-                <circle cx="10" cy="10" r="8.5" stroke="#b89a6f" stroke-width="1.2" />
-                <path d="M10 9v5M10 7v.5" stroke="#b89a6f" stroke-width="1.4" stroke-linecap="round" />
-            </svg>
-            <span>Após inserir seu nome no(s) presente(s) desejado(s), clique em <strong>"Confirmar presentes"</strong>
-                no final da página.</span>
-        </div>
-
         <div id="loading-state" class="loading-state">
             <div class="spinner"></div>
             <p>Carregando a lista...</p>
         </div>
 
+        <div id="progress-wrap"></div>
         <div id="lista-presentes" class="gift-grid"></div>
-
-        <div class="confirm-area fade-in">
-            <button class="btn-primary" onclick="confirmarPresentes()">
-                <span>Confirmar presentes</span>
-                <svg class="btn-arrow" viewBox="0 0 20 20" fill="none">
-                    <path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                </svg>
-            </button>
-        </div>
-
     </main>
 
-    <div id="toast" class="toast" style="display:none">
-        Por favor, insira seu nome em pelo menos um presente!
+    <div id="modal-overlay" class="modal-overlay" onclick="fecharModal()" style="display:none"></div>
+    <div id="confirm-modal" class="confirm-modal" style="display:none">
+        <button class="modal-close" onclick="fecharModal()">
+            <svg viewBox="0 0 20 20" fill="none" width="16">
+                <path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+        </button>
+        <p class="modal-label">Você escolheu:</p>
+        <p class="modal-gift-name" id="modal-gift-label"></p>
+        <p class="modal-ask">Qual é o seu nome?</p>
+        <input id="modal-nome" type="text" placeholder="Seu nome completo" autocomplete="name">
+        <button class="btn-primary modal-confirm-btn" id="modal-btn-confirm" onclick="confirmarEscolha()">
+            <span>Confirmar presente</span>
+            <svg class="btn-arrow" viewBox="0 0 20 20" fill="none">
+                <path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg>
+        </button>
     </div>
 
-    <script type="module" src="script/script.js"></script>
-    <script type="module" src="script/config.js"></script>
-    
+    <div id="toast" class="toast" style="display:none"></div>
+
+    <script src="script/script.js"></script>
 </body>
 
 </html>

@@ -1,167 +1,159 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
-    getFirestore,
-    collection,
-    getDocs,
-    updateDoc,
-    doc
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+var API_URL = "https://script.google.com/macros/s/AKfycbznlwiWGBUN95-W-xASinQE4A20R8VMncZNGOAJjsfluJ_-jxtQGhNH4mVFerMXmZff/exec";
 
-import { firebaseConfig } from "./config.js";
+var presenteAtualLinha = null;
+var presenteAtualNome = null;
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const lista = document.getElementById("lista-presentes");
-const loading = document.getElementById("loading-state");
-
-let presentesMap = [];
-
-async function carregarPresentes() {
-    try {
-        const querySnapshot = await getDocs(collection(db, "presentes"));
-
+fetch(API_URL)
+    .then(function (res) { return res.json(); })
+    .then(function (dados) {
+        var loading = document.getElementById("loading-state");
         if (loading) loading.style.display = "none";
 
-        lista.innerHTML = "";
+        var taken = dados.filter(function (i) { return i[3]; }).length;
+        var total = dados.length;
+        var pct = total ? Math.round((taken / total) * 100) : 0;
 
-        let taken = 0;
-        let total = 0;
+        // Barra de progresso
+        var progressWrap = document.getElementById("progress-wrap");
+        if (progressWrap) {
+            progressWrap.innerHTML =
+                '<div class="progress-bar-wrap fade-in delay-2">' +
+                '<div class="progress-labels">' +
+                '<span>' + taken + ' de ' + total + ' presentes já escolhidos</span>' +
+                '<span>' + pct + '%</span>' +
+                '</div>' +
+                '<div class="progress-track">' +
+                '<div class="progress-fill" style="width:' + pct + '%"></div>' +
+                '</div>' +
+                '</div>';
+        }
 
-        querySnapshot.forEach((docSnap, index) => {
-            const item = docSnap.data();
-            total++;
+        // Cards
+        var lista = document.getElementById("lista-presentes");
+        dados.forEach(function (item, index) {
+            var isTaken = !!item[3];
+            var linha = index + 2;
 
-            const isTaken = !!item.escolhidoPor;
-            if (isTaken) taken++;
-
-            presentesMap.push({
-                id: docSnap.id,
-                ...item
-            });
-
-            const div = document.createElement("div");
+            var div = document.createElement("div");
             div.className = "gift-card fade-in" + (isTaken ? " taken" : "");
+            div.style.animationDelay = (index * 0.04) + "s";
 
-            div.innerHTML = `
-                <div class="gift-img-wrap">
-                    <img src="${item.imagem}" alt="${item.nome}">
-                    ${isTaken ? '<div class="taken-badge">Escolhido ✓</div>' : ""}
-                </div>
+            var linkHtml = item[2]
+                ? '<a href="' + item[2] + '" target="_blank" class="gift-link">' +
+                '<svg viewBox="0 0 16 16" fill="none" width="13">' +
+                '<path d="M6 3H3a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1v-3M9 2h5v5M14 2L8 8"' +
+                ' stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>' +
+                '</svg>' +
+                'Sugestão de onde comprar' +
+                '</a>'
+                : "";
 
-                <div class="gift-info">
-                    <h3 class="gift-name">${item.nome}</h3>
+            var footerHtml = isTaken
+                ? '<div class="taken-by"><span class="taken-heart">♥</span> Escolhido por <strong>' + item[3] + '</strong></div>'
+                : '<button class="btn-escolher" onclick="abrirModal(' + linha + ', \'' + item[0].replace(/'/g, "\\'").replace(/\n/g, " ") + '\')">' +
+                '<svg viewBox="0 0 20 20" fill="none" width="14">' +
+                '<path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>' +
+                '</svg>' +
+                'Escolher este presente' +
+                '</button>';
 
-                    ${item.linkCompra
-                    ? `<a href="${item.linkCompra}" target="_blank" class="gift-link">
-                            Sugestão de onde comprar
-                          </a>`
-                    : ""
-                }
-
-                    <div class="gift-footer">
-                        ${isTaken
-                    ? `<div class="taken-by">Escolhido por <strong>${item.escolhidoPor}</strong></div>`
-                    : `<div class="input-wrap">
-                                <input
-                                    type="text"
-                                    placeholder="Seu nome aqui"
-                                    data-id="${docSnap.id}"
-                                >
-                               </div>`
-                }
-                    </div>
-                </div>
-            `;
+            div.innerHTML =
+                '<div class="gift-img-wrap">' +
+                '<img src="' + item[1] + '" alt="' + item[0].replace(/\n/g, " ") + '" loading="lazy">' +
+                (isTaken ? '<div class="taken-badge">Escolhido ✓</div>' : '') +
+                '</div>' +
+                '<div class="gift-info">' +
+                '<h3 class="gift-name">' + item[0].replace(/\n/g, "<br>") + '</h3>' +
+                linkHtml +
+                '<div class="gift-footer">' + footerHtml + '</div>' +
+                '</div>';
 
             lista.appendChild(div);
         });
-
-        const progress = Math.round((taken / total) * 100);
-
-        lista.insertAdjacentHTML("beforebegin", `
-            <div class="progress-bar-wrap fade-in">
-                <div class="progress-labels">
-                    <span>${taken} de ${total} presentes já escolhidos</span>
-                    <span>${progress}%</span>
-                </div>
-                <div class="progress-track">
-                    <div class="progress-fill" style="width:${progress}%"></div>
-                </div>
-            </div>
-        `);
-
-    } catch (error) {
-        console.error(error);
-    }
-}
-
-carregarPresentes();
-
-window.confirmarPresentes = async function () {
-    const inputs = document.querySelectorAll("input[data-id]");
-    const updates = [];
-
-    inputs.forEach(input => {
-        if (input.value.trim()) {
-            updates.push({
-                id: input.dataset.id,
-                nome: input.value.trim()
-            });
-        }
+    })
+    .catch(function (err) {
+        var loading = document.getElementById("loading-state");
+        if (loading) loading.innerHTML = '<p class="error-msg">Não foi possível carregar a lista. Tente novamente.</p>';
+        console.error(err);
     });
 
-    if (updates.length === 0) {
-        showToast("Digite seu nome em pelo menos um presente");
+function abrirModal(linha, nome) {
+    presenteAtualLinha = linha;
+    presenteAtualNome = nome;
+
+    document.getElementById("modal-gift-label").textContent = nome;
+    document.getElementById("modal-nome").value = "";
+
+    var overlay = document.getElementById("modal-overlay");
+    var modal = document.getElementById("confirm-modal");
+    overlay.style.display = "block";
+    modal.style.display = "flex";
+
+    requestAnimationFrame(function () {
+        modal.classList.add("open");
+        overlay.classList.add("open");
+    });
+
+    setTimeout(function () {
+        document.getElementById("modal-nome").focus();
+    }, 200);
+}
+
+function fecharModal() {
+    var modal = document.getElementById("confirm-modal");
+    var overlay = document.getElementById("modal-overlay");
+    modal.classList.remove("open");
+    overlay.classList.remove("open");
+    setTimeout(function () {
+        modal.style.display = "none";
+        overlay.style.display = "none";
+    }, 280);
+}
+
+document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") fecharModal();
+});
+
+function confirmarEscolha() {
+    var nome = document.getElementById("modal-nome").value.trim();
+    if (!nome) {
+        var input = document.getElementById("modal-nome");
+        input.classList.add("shake");
+        setTimeout(function () { input.classList.remove("shake"); }, 500);
         return;
     }
 
-    try {
-        for (const item of updates) {
-            const ref = doc(db, "presentes", item.id);
+    var btn = document.getElementById("modal-btn-confirm");
+    btn.classList.add("loading");
+    btn.querySelector("span").textContent = "Confirmando...";
 
-            await updateDoc(ref, {
-                escolhidoPor: item.nome
-            });
-        }
-
-        window.location.href = "obrigado.html";
-    } catch (error) {
-        console.error(error);
-        showToast("Erro ao confirmar");
-    }
-};
+    fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify([{ linha: presenteAtualLinha, nome: nome }])
+    })
+        .then(function () {
+            fecharModal();
+            localStorage.setItem("musica", "tocando");
+            setTimeout(function () {
+                window.location.href = "obrigado.html";
+            }, 350);
+        })
+        .catch(function (err) {
+            showToast("Ocorreu um erro. Tente novamente.");
+            btn.classList.remove("loading");
+            btn.querySelector("span").textContent = "Confirmar presente";
+            console.error(err);
+        });
+}
 
 function showToast(msg) {
-    const t = document.getElementById("toast");
+    var t = document.getElementById("toast");
+    if (!t) return;
     t.textContent = msg;
     t.style.display = "block";
     t.classList.add("show");
-
-    setTimeout(() => {
+    setTimeout(function () {
         t.classList.remove("show");
-        setTimeout(() => t.style.display = "none", 400);
-    }, 3000);
+        setTimeout(function () { t.style.display = "none"; }, 400);
+    }, 3500);
 }
-
-    function iniciarContagem() {
-    const dataEvento = new Date("June 14, 2026 15:00:00").getTime();
-
-    setInterval(() => {
-        const agora = new Date().getTime();
-    const distancia = dataEvento - agora;
-
-    const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
-    const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
-    const segundos = Math.floor((distancia % (1000 * 60)) / 1000);
-
-    document.getElementById("dias").textContent = dias;
-    document.getElementById("horas").textContent = horas;
-    document.getElementById("minutos").textContent = minutos;
-    document.getElementById("segundos").textContent = segundos;
-
-    }, 1000);
-}
-
-    iniciarContagem();
