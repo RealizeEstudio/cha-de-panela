@@ -23,7 +23,7 @@
             document.getElementById("musica").play().catch(() => { });
             document.removeEventListener("click", tocarUmaVez);
         });
-
+        
         function tocarEMudarPagina(e) {
             e.preventDefault();
             localStorage.setItem("musica", "tocando");
